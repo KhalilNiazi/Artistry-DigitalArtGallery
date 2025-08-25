@@ -1,0 +1,53 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme -->
+    <style name="Theme.DigiArt" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+
+        <!-- Background color for activities -->
+        <item name="android:windowBackground">@color/colorBackground</item>
+
+        <!-- Customize default text colors -->
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:textColorHint">@color/colorTextHint</item>
+
+        <!-- Button styles -->
+        <item name="buttonStyle">@style/Widget.DigiArt.Button</item>
+
+        <!-- EditText styles -->
+        <item name="editTextStyle">@style/Widget.DigiArt.EditText</item>
+
+        <!-- Disable default action bar since we use NoActionBar -->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
+
+    <!-- Custom Button style -->
+    <style name="Widget.DigiArt.Button" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <!-- Custom EditText style -->
+    <style name="Widget.DigiArt.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textColorHint">@color/colorTextHint</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <color name="colorBackground">#FFFFFF</color>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="font_options">
+        <item>Default</item>
+        <item>Monospace</item>
+        <item>Serif</item>
+        <item>Sans</item>
+    </string-array>
+</resources>

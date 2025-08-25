@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101010">
+
+    <!-- Top bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:background="#181818">
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Photo"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp" />
+    </LinearLayout>
+
+    <!-- Main Image Editor -->
+    <ja.burhanrashid52.photoeditor.PhotoEditorView
+        android:id="@+id/photoEditorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/bottomBar"
+        android:background="#000" />
+
+    <!-- Text Controls Panel (hidden by default, shown when adding text) -->
+    <LinearLayout
+        android:id="@+id/textControlsPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorShadow"
+        android:padding="12dp"
+        android:layout_below="@id/topBar"
+        android:layout_alignParentEnd="true">
+
+        <!-- Font Selector -->
+        <Spinner
+            android:id="@+id/fontSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/font_options"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Text Size -->
+        <SeekBar
+            android:id="@+id/sizeSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="42" />
+
+        <!-- Color Picker -->
+        <com.skydoves.colorpickerview.ColorPickerView
+            android:id="@+id/colorPickerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:palette="@drawable/palette"
+             />
+    </LinearLayout>
+
+    <!-- Filter Preview Thumbnails -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/photoEditorView">
+
+        <GridLayout
+            android:id="@+id/filterPreviewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="8dp"
+            android:background="#202020"
+            android:alignmentMode="alignMargins"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:useDefaultMargins="true" />
+    </HorizontalScrollView>
+
+    <!-- Bottom Toolbar -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#181818"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/btnDraw"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_draw"
+              app:tint="@android:color/white" 
+            android:contentDescription="Draw" />
+
+        <ImageButton
+            android:id="@+id/btnAddText"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_addtext"
+              app:tint="@android:color/white" 
+            android:contentDescription="Text" />
+
+        <ImageButton
+            android:id="@+id/btnApplyFilter"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_filter"
+            android:contentDescription="Filter"
+            app:tint="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/btnUndo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_undo"
+              app:tint="@android:color/white" 
+            android:contentDescription="Undo" />
+
+        <ImageButton
+            android:id="@+id/btnRedo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_redo"
+              app:tint="@android:color/white" 
+            android:contentDescription="Redo" />
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_save"
+            android:tint="@color/colorButtonBackground"
+            android:contentDescription="Save" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+        <!-- Primary brand color -->
+        <color name="colorPrimary">#E60023</color>
+        <color name="colorPrimaryDark">#B0001A</color>
+        <color name="colorPrimaryLight">#FF4D57</color>
+
+
+        <!-- Text colors -->
+        <color name="colorTextPrimary">#E60023</color>  <!-- for logos, buttons -->
+        <color name="colorTextSecondary">#444444</color> <!-- normal text -->
+        <color name="colorTextHint">#888888</color> <!-- hints, OR separator -->
+        <color name="colorTextDisabled">#CCCCCC</color> <!-- lines -->
+
+        <!-- Button backgrounds -->
+        <color name="colorButtonBackground">#E60023</color>
+        <color name="colorButtonText">#FFFFFF</color>
+
+        <!-- Google button -->
+        <color name="colorGoogleText">#444444</color>
+        <color name="colorGoogleBackground">#FFFFFF</color>
+
+        <!-- Facebook button -->
+        <color name="colorFacebookText">#3b5998</color>
+        <color name="colorFacebookBackground">#FFFFFF</color>
+
+        <!-- Elevation shadows -->
+        <color name="colorShadow">#22000000</color>
+
+</resources>
