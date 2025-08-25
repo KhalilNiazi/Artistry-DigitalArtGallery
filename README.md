@@ -1,47 +1,95 @@
-# Artritry - Digital Art Gallery
+# 🎨 DigiArt - Digital Art Gallery App
 
-Welcome to **Artritry**, a digital art gallery app that allows users to showcase and explore stunning digital artworks. This platform connects artists and art enthusiasts, providing a seamless experience to share and discover creative pieces.
-
----
-
-## Features
-
-- **User Profiles:** Create and customize your profile with name, bio, and profile picture.
-- **Artwork Showcase:** Upload, browse, and explore digital artworks in a beautiful gallery layout.
-- **Search & Favorites:** Find your favorite art pieces easily and save them for later.
-- **Responsive Design:** Optimized for smartphones and tablets.
-- **Firebase Integration:** Uses Firebase Authentication and Firestore for secure user management and data storage.
+DigiArt is a modern Android application that allows users to **explore, upload, and manage artworks**.  
+With Firebase integration, it provides **real-time data syncing**, secure user authentication, and a clean UI for a smooth digital art gallery experience.  
 
 ---
 
-## Technologies Used
+## ✨ Features
 
-- **Language:** Java (Android)
-- **Framework:** Android Studio
-- **Libraries:** Glide (image loading), Firebase (Authentication, Firestore)
-- **Version Control:** Git and GitHub
+- 🔐 **User Authentication**
+  - Login & Register with Firebase Authentication.
+  - Google Sign-in support.
+
+- 📂 **Artwork Management**
+  - Upload artworks with **title, description, category, and image**.
+  - Store artworks securely in **Firebase Firestore**.
+  - Display images using **Glide**.
+
+- ⭐ **Favorites System (New!)**
+  - Mark/unmark artworks as **favorites**.
+  - View all your favorite artworks in a **dedicated screen**.
+  - Favorites stored in Firestore under each user.
+
+- 🔍 **Browse & Search**
+  - Explore all artworks uploaded by users.
+  - Filter artworks by category.
+  - Search by title or description.
+
+- 🕒 **Real-time Updates**
+  - Artworks sorted by **timestamp**.
+  - New uploads appear instantly.
+
+- 🎨 **UI & UX**
+  - Modern **Material Design 3**.
+  - Light/Dark mode support.
+  - Smooth scrolling with **RecyclerView + Shimmer Loading**.
 
 ---
 
-## Installation
+## 🛠️ Tech Stack
 
-1. Clone the repository:
+- **Language**: Java  
+- **UI**: XML, Material Design 3  
+- **Database**: Firebase Firestore  
+- **Authentication**: Firebase Auth  
+- **Storage**: Firebase Storage (for images)  
+- **Libraries**:
+  - Glide (Image loading)
+  - Shimmer (Loading effects)
+  - RecyclerView & CardView
 
-   ```bash
-   git clone https://github.com/KhalilNiazi/Artritry-DigitalArtGallery.git
-Open the project in Android Studio.
+---
 
-Set up your Firebase project and add the google-services.json file in the app directory.
+## 📂 Firestore Structure
 
-Build and run the app on an emulator or Android device.
+```plaintext
+users/{userId}
+    name: string
+    email: string
+    favorites: [artId1, artId2, ...]
+artworks/{artId}
+    id: string
+    userId: string
+    title: string
+    description: string
+    category: string
+    image: string (url)
+    timestamp: Timestamp
+```
 
-Usage
-Register or sign in with your account.
+## Connect your app to Firebase (Tools > Firebase).
+```
+Enable:
+Firebase Authentication (Email/Google).
+Firestore Database.
+Firebase Storage.
+```
+---
+## 📸 Screenshots
+<img width="384" height="663" alt="image" src="https://github.com/user-attachments/assets/301ffa06-dc1f-4635-aea0-6a1d4e90abe9" />
 
-Upload your digital art pieces.
+---
+## 🎯 Future Improvements
+- 💬 Comments on artworks
+- ❤️ Like system with counts
+- 👤 User profiles & bio
+- 📤 Share artworks to social media
 
-Explore artworks uploaded by other users.
 
-Edit your profile information anytime.
 
-Save your favorite artworks for easy access.
+
+
+
+
+Ask ChatGPT
