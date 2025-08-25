@@ -1,6 +1,6 @@
-# 🎨 DigiArt - Digital Art Gallery App
+# 🎨 Artistry - Digital Art Gallery App
 
-DigiArt is a modern Android application that allows users to **explore, upload, and manage artworks**.  
+Artistry is a modern Android application that allows users to **explore, upload, and manage artworks**.  
 With Firebase integration, it provides **real-time data syncing**, secure user authentication, and a clean UI for a smooth digital art gallery experience.  
 
 ---
@@ -77,7 +77,7 @@ Firebase Storage.
 ```
 ---
 ## 📸 Screenshots
-<img width="384" height="663" alt="image" src="https://github.com/user-attachments/assets/301ffa06-dc1f-4635-aea0-6a1d4e90abe9" />
+<img width="284" height="463" alt="image" src="https://github.com/user-attachments/assets/301ffa06-dc1f-4635-aea0-6a1d4e90abe9" />
 
 ---
 ## 🎯 Future Improvements
