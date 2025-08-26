@@ -1,129 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:scrollbars="none"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- User Info Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-
-            <ImageView
-                android:id="@+id/imgUserProfile"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_user_placeholder"
-            android:background="@drawable/circle_bg"
-            android:layout_marginEnd="12dp" />
-
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Username"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <!-- Art Image -->
+        <!-- Fullscreen Pin Image -->
         <ImageView
             android:id="@+id/imgFullArt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:contentDescription="Artwork"
-            android:layout_marginBottom="16dp" />
+            android:contentDescription="Artwork" />
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvFullTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginBottom="4dp" />
-
-        <!-- Category -->
-        <TextView
-            android:id="@+id/tvFullCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textColor="#888888"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Description -->
-        <TextView
-            android:id="@+id/tvFullDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#444444"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Comments Header -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Comments"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <!-- RecyclerView for Comments -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
-
-        <!-- Comment Input Field -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
+            android:padding="12dp"
+            android:gravity="end">
 
-            <EditText
-                android:id="@+id/etComment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Add a comment..."
-                android:padding="10dp"
-                android:textColor="#000000"
-                android:textSize="14sp" />
-<!--
-            android:background="@drawable/edittext_bg"-->
-            <TextView
-                android:id="@+id/btnSendComment"
+            <ImageView
+                android:id="@+id/btnShare"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:drawableStart="@android:drawable/ic_menu_send"
-                android:contentDescription="Send"
-                android:padding="6dp"
-                android:layout_marginStart="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:padding="8dp"
+
+                android:src="@drawable/ic_share"
+                android:tint="@color/colorPrimary"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Share" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Save"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginStart="12dp"/>
         </LinearLayout>
 
+        <!-- Pin Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvFullTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artwork Title"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvFullDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is the description of the artwork..."
+                android:textSize="15sp"
+                android:textColor="#444444"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- User Info (profile row under description like Pinterest) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgUserProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_user_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:layout_marginEnd="12dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FF000000" />
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <!-- Comments Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Comment Input -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etComment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Add a comment..."
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_background"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/btnSendComment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:src="@android:drawable/ic_menu_send"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Send" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <!-- Related Pins -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="More like this"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:padding="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRelated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:nestedScrollingEnabled="false"/>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

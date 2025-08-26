@@ -1,4 +1,4 @@
-package com.khalildev.digiart.Fragment;
+package com.khalildev.artistry.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.khalildev.digiart.Adapter.ArtAdapter;
-import com.khalildev.digiart.Adapter.ArtItem;
-import com.khalildev.digiart.R;
+import com.khalildev.artistry.Adapter.ArtAdapter;
+import com.khalildev.artistry.Adapter.ArtItem;
+import com.khalildev.artistry.R;
 
 import java.util.ArrayList;
 import java.util.List;

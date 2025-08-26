@@ -1,7 +1,11 @@
-package com.khalildev.digiart.Fragment;
+package com.khalildev.artistry.Fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +26,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.khalildev.digiart.Adapter.ArtAdapter;
-import com.khalildev.digiart.Adapter.ArtItem;
-import com.khalildev.digiart.EditProfileActivity;
-import com.khalildev.digiart.R;
+import com.khalildev.artistry.Adapter.ArtAdapter;
+import com.khalildev.artistry.Adapter.ArtItem;
+import com.khalildev.artistry.EditProfileActivity;
+import com.khalildev.artistry.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,21 +102,45 @@ public class ProfileFragment extends Fragment {
                     if (snapshot.exists()) {
                         String name = snapshot.getString("name");
                         String bio = snapshot.getString("bio");
-                        profileUrl = snapshot.getString("photo");  // Retrieve "photo" field for the profile image
+                        profileUrl = snapshot.getString("photo");  // This will be the Base64 string
 
+                        // Set Name and Bio
                         tvName.setText(name != null ? name : "Your Name");
                         tvBio.setText(bio != null ? bio : "Your Bio");
 
+                        // Check if profileUrl (Base64 string) is not empty
                         if (profileUrl != null && !profileUrl.isEmpty()) {
-                            Glide.with(this).load(profileUrl).circleCrop().into(ivProfile);
+                            // Decode Base64 string to Bitmap
+                            Bitmap decodedBitmap = decodeBase64ToBitmap(profileUrl);
+                            if (decodedBitmap != null) {
+                                ivProfile.setImageBitmap(decodedBitmap);
+                            } else {
+                                ivProfile.setImageResource(R.drawable.ic_user_placeholder);  // Default image if decoding fails
+                            }
                         } else {
-                            ivProfile.setImageResource(R.drawable.bg_button_primary);  // Optional default image
+                            ivProfile.setImageResource(R.drawable.ic_user_placeholder);  // Default image
                         }
+                    } else {
+                        Log.d("ProfileFragment", "No document found");
                     }
                 })
                 .addOnFailureListener(e -> {
+                    Log.e("ProfileFragment", "Error loading profile: ", e);
                     Toast.makeText(getContext(), "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    /**
+     * Method to decode Base64 string into Bitmap
+     */
+    private Bitmap decodeBase64ToBitmap(String base64String) {
+        try {
+            byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void loadUserArts() {

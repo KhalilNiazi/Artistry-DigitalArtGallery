@@ -1,10 +1,13 @@
-package com.khalildev.digiart.Adapter;
+package com.khalildev.artistry.Adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,15 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.khalildev.digiart.ArtPreviewActivity;
-import com.khalildev.digiart.R;
+import com.khalildev.artistry.ArtPreviewActivity;
+import com.khalildev.artistry.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
@@ -69,17 +75,22 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
         Bitmap finalBitmap = bitmap;
         holder.itemView.setOnClickListener(v -> {
             try {
-                // Save the image to cache and create the intent
                 File imageFile = saveImageToCache(art.getTitle(), finalBitmap);
 
+                Uri uri = FileProvider.getUriForFile(
+                        context,
+                        context.getPackageName() + ".fileprovider",
+                        imageFile
+                );
+
                 Intent intent = new Intent(context, ArtPreviewActivity.class);
-                intent.putExtra("image_uri", Uri.fromFile(imageFile).toString());
+                intent.putExtra("image_uri", uri.toString());
                 intent.putExtra("title", art.getTitle());
                 intent.putExtra("description", art.getDescription());
                 intent.putExtra("category", art.getCategory());
+                intent.putExtra("artDocId", art.getId());
+                intent.putExtra("author_uid", art.getUserId());  // Pass the author's UID
 
-                // Pass the document ID (artDocId) for potential use in the preview activity
-                intent.putExtra("artDocId", art.getId()); // Pass the art document ID here
 
                 context.startActivity(intent);
 
@@ -88,23 +99,23 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
             }
         });
 
-        // Three-dot menu for options (share, download, favorite)
+        // Three-dot menu
         Bitmap finalBitmapMenu = bitmap;
         holder.imgOptions.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, holder.imgOptions);
             popup.inflate(R.menu.art_item_menu);
-            popup.setOnMenuItemClickListener(item -> handleMenuClick(item, art, finalBitmapMenu));
+            popup.setOnMenuItemClickListener(item -> handleMenuClick(item, art, finalBitmapMenu, holder.itemView));
             popup.show();
         });
     }
 
-    private boolean handleMenuClick(MenuItem item, ArtItem art, Bitmap bitmap) {
+    private boolean handleMenuClick(MenuItem item, ArtItem art, Bitmap bitmap, View view) {
         int id = item.getItemId();
         if (id == R.id.menu_share) {
             shareImage(art, bitmap);
             return true;
         } else if (id == R.id.menu_download) {
-            downloadImage(art, bitmap);
+            downloadImage(art, bitmap, view);
             return true;
         } else if (id == R.id.menu_favorite) {
             saveToFavorites(art);
@@ -120,14 +131,12 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
             firestore.collection("users")
                     .document(uid)
                     .collection("favorites")
-                    .document(art.getId()) // Art ID is used as the document ID
+                    .document(art.getId())
                     .set(art)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(context, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         } else {
             Toast.makeText(context, "You must be logged in to save to favorites.", Toast.LENGTH_SHORT).show();
         }
@@ -136,28 +145,43 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
     private void shareImage(ArtItem art, Bitmap bitmap) {
         try {
             File file = saveImageToCache(art.getTitle(), bitmap);
-            Uri contentUri = Uri.fromFile(file);
+            Uri contentUri = FileProvider.getUriForFile(
+                    context,
+                    context.getPackageName() + ".fileprovider",
+                    file
+            );
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("image/*");
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             context.startActivity(Intent.createChooser(shareIntent, "Share Image"));
         } catch (Exception e) {
             Toast.makeText(context, "Share failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void downloadImage(ArtItem art, Bitmap bitmap) {
+    private void downloadImage(ArtItem art, Bitmap bitmap, View view) {
         try {
-            File dir = new File(context.getExternalFilesDir(null), "DigiArt");
-            if (!dir.exists()) dir.mkdirs();
-            File file = new File(dir, art.getTitle() + ".png");
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
+            String fileName = art.getTitle() + ".jpg";
 
-            Toast.makeText(context, "Saved to " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Artistry");
+
+            Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            if (uri != null) {
+                OutputStream outputStream = context.getContentResolver().openOutputStream(uri);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                if (outputStream != null) outputStream.close();
+
+                Snackbar.make(view, "Saved to Gallery → Artistry", Snackbar.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show();
+            }
+
         } catch (Exception e) {
             Toast.makeText(context, "Download failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -186,7 +210,7 @@ public class ArtAdapter extends RecyclerView.Adapter<ArtAdapter.ArtViewHolder> {
 
         public ArtViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgArt = itemView.findViewById(R.id.imgArt);
+            imgArt = itemView.findViewById(R.id.itemImage);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvCategory = itemView.findViewById(R.id.tvCategory);
             tvDescription = itemView.findViewById(R.id.tvDescription);

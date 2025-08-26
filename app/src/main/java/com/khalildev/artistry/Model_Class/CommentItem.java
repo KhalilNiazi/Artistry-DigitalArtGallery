@@ -1,4 +1,4 @@
-package com.khalildev.digiart.Model_Class;
+package com.khalildev.artistry.Model_Class;
 
 import com.google.firebase.Timestamp;
 
@@ -9,7 +9,8 @@ public class CommentItem {
     private String text;
     private com.google.firebase.Timestamp timestamp;
 
-    public CommentItem() {}
+    public CommentItem() {
+    }
 
     public CommentItem(String id, String userId, String userName, String text, com.google.firebase.Timestamp timestamp) {
         this.id = id;

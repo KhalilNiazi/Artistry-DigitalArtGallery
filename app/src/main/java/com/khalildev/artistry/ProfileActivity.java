@@ -1,4 +1,4 @@
-package com.khalildev.digiart;
+package com.khalildev.artistry;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
@@ -19,10 +20,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,14 +47,24 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private StorageReference storageRef;
 
-    private static final int GALLERY_REQUEST_CODE = 101;
+    private final ActivityResultLauncher<Intent> galleryLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    selectedImageUri = result.getData().getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                        imgProfilePic.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile); // Your layout XML
+        setContentView(R.layout.activity_profile);
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference("profile_images");
@@ -63,10 +76,9 @@ public class ProfileActivity extends AppCompatActivity {
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         tvSkip = findViewById(R.id.tvSkip);
 
-        // Load image from intent or set up gallery picker
         handleIncomingProfileImage();
 
-        imgProfilePic.setOnClickListener(v -> selectImageFromGallery());
+        imgProfilePic.setOnClickListener(v -> checkPermissionsAndOpenGallery());
 
         btnSaveProfile.setOnClickListener(v -> saveProfileToFirebase());
 
@@ -81,34 +93,24 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this).load(imageUrl).into(imgProfilePic);
-        } else {
-            selectImageFromGallery();
         }
     }
 
-    private void selectImageFromGallery() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+    private void checkPermissionsAndOpenGallery() {
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ?
+                Manifest.permission.READ_MEDIA_IMAGES :
+                Manifest.permission.READ_EXTERNAL_STORAGE;
+
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, 1);
         } else {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            openGallery();
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                imgProfilePic.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galleryLauncher.launch(intent);
     }
 
     private void saveProfileToFirebase() {
@@ -121,17 +123,30 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        String uid = mAuth.getCurrentUser().getUid();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String uid = currentUser.getUid();
 
         if (selectedImageUri != null) {
-            // Upload profile picture to Firebase Storage
-            StorageReference fileRef = storageRef.child(uid + "." + getFileExtension(selectedImageUri));
+            String extension = getFileExtension(selectedImageUri);
+            if (extension == null) {
+                Toast.makeText(this, "Invalid image file", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            StorageReference fileRef = storageRef.child(uid + "." + extension);
             fileRef.putFile(selectedImageUri)
-                    .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String imageUrl = uri.toString();
-                        uploadUserData(uid, displayName, username, bio, imageUrl);
-                    }))
-                    .addOnFailureListener(e -> Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnSuccessListener(taskSnapshot ->
+                            fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageUrl = uri.toString();
+                                uploadUserData(uid, displayName, username, bio, imageUrl);
+                            }))
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         } else {
             uploadUserData(uid, displayName, username, bio, null);
         }
@@ -154,14 +169,27 @@ public class ProfileActivity extends AppCompatActivity {
                     startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                     finish();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(ProfileActivity.this, "Failed to save profile", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e ->
+                        Toast.makeText(ProfileActivity.this, "Failed to save profile", Toast.LENGTH_SHORT).show());
     }
 
     private String getFileExtension(Uri uri) {
+        if (uri == null) return null;
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1 && grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openGallery();
+        } else {
+            Toast.makeText(this, "Permission denied to access media", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.khalildev.digiart.Adapter;
+package com.khalildev.artistry.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.khalildev.digiart.Model_Class.CommentItem;
-import com.khalildev.digiart.R;
+import com.khalildev.artistry.Model_Class.CommentItem;
+import com.khalildev.artistry.R;
 
 import java.text.DateFormat;
 import java.util.Calendar;

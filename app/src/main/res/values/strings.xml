@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Digi Art</string>
+    <string name="app_name">Artistry</string>
     <string name="default_web_client_id">10477051070-hudlqmt03nel053s35e3fbr83c8sgkg0.apps.googleusercontent.com</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_picture">Profile picture</string>

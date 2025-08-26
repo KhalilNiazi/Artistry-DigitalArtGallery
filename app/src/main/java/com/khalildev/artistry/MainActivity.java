@@ -1,4 +1,4 @@
-package com.khalildev.digiart;
+package com.khalildev.artistry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -25,23 +24,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.khalildev.digiart.Fragment.FavoritesFragment;
-import com.khalildev.digiart.Fragment.Home_Fragment;
-import com.khalildev.digiart.Fragment.ProfileFragment;
-import com.khalildev.digiart.Fragment.SearchFragment;
+import com.khalildev.artistry.Fragment.FavoritesFragment;
+import com.khalildev.artistry.Fragment.Home_Fragment;
+import com.khalildev.artistry.Fragment.ProfileFragment;
+import com.khalildev.artistry.Fragment.SearchFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-import ja.burhanrashid52.photoeditor.PhotoEditorView;
-import ja.burhanrashid52.photoeditor.PhotoFilter;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -188,10 +183,6 @@ public class MainActivity extends AppCompatActivity {
             String description = edtDescription.getText().toString().trim();
             String category = edtCategory.getText().toString().trim();
 
-            if (title.isEmpty() || description.isEmpty() || category.isEmpty()) {
-                Toast.makeText(getContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
             showLoading();
 
@@ -206,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
             imageData.put("category", category);
             imageData.put("image", encodedImage);
             imageData.put("timestamp", com.google.firebase.Timestamp.now());
+            imageData.put("userId", userId); // ✅ This is the author UID
 
             // ✅ Save inside arts/{userId}/userArts/{docId}
             firestore.collection("arts")

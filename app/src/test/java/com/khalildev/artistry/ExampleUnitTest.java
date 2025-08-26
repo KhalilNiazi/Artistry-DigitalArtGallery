@@ -1,4 +1,4 @@
-package com.khalildev.digiart;
+package com.khalildev.artistry;
 
 import org.junit.Test;
 

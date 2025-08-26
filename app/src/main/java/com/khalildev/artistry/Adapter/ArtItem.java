@@ -1,4 +1,4 @@
-package com.khalildev.digiart.Adapter;
+package com.khalildev.artistry.Adapter;
 
 import com.google.firebase.Timestamp;
 

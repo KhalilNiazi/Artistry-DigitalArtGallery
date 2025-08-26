@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
     android:padding="24dp"
     tools:context=".LoginActivity">
@@ -108,19 +109,20 @@
                 android:background="@color/colorTextDisabled" />
         </LinearLayout>
 
-        <!-- Google Login Button -->
 
-        <!-- Facebook Login Button -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_google_login"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_button_outline"
+            app:backgroundTint="#F0F0F0"
+            app:elevation="5dp"
+            android:background="@drawable/edittext_background"
             android:drawableLeft="@drawable/googleg_standard_color_18"
             android:drawablePadding="12dp"
             android:gravity="center_vertical|start"
             android:paddingLeft="16dp"
+
             android:paddingRight="16dp"
             android:text="Continue with Google"
             android:textColor="@color/colorTextPrimary"
@@ -132,6 +134,7 @@
             android:layout_height="48dp"
             android:drawableLeft="@drawable/ic_facebook"
             android:drawablePadding="12dp"
+            app:backgroundTint="#F0F0F0"
             android:text="Continue with Facebook"
             android:textColor="@color/colorFacebookText"
             android:background="@drawable/bg_button_outline"

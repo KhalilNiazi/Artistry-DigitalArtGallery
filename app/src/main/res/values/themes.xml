@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme -->
-    <style name="Theme.DigiArt" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.Artistry" parent="Theme.Material3.Light.NoActionBar">
 
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -1,4 +1,4 @@
-package com.khalildev.digiart.Fragment;
+package com.khalildev.artistry.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,17 +9,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.khalildev.digiart.Adapter.ArtAdapter;
-import com.khalildev.digiart.Adapter.ArtItem;
-import com.khalildev.digiart.R;
+import com.khalildev.artistry.Adapter.ArtAdapter;
+import com.khalildev.artistry.Adapter.ArtItem;
+import com.khalildev.artistry.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +46,10 @@ public class Home_Fragment extends Fragment {
         artList = new ArrayList<>();
         adapter = new ArtAdapter(getContext(), artList);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        StaggeredGridLayoutManager layoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         loadArts();

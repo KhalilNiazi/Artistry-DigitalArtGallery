@@ -1,4 +1,4 @@
-package com.khalildev.digiart;
+package com.khalildev.artistry;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
