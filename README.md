@@ -77,7 +77,10 @@ Firebase Storage.
 ```
 ---
 ## 📸 Screenshots
-<img width="284" height="463" alt="image" src="https://github.com/user-attachments/assets/301ffa06-dc1f-4635-aea0-6a1d4e90abe9" />
+---
+<img src="https://github.com/user-attachments/assets/301ffa06-dc1f-4635-aea0-6a1d4e90abe9" width="200"/>
+<img src="https://github.com/user-attachments/assets/f58fd6cd-bdee-4881-8896-73035fb15815" width="200"/>	
+<img src="https://github.com/user-attachments/assets/81e804c1-a515-4ce8-88e8-cf64c0bf9e65" width="200"/>
 
 ---
 ## 🎯 Future Improvements
